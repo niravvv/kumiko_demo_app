@@ -1,0 +1,101 @@
+id,name,description,category,is_moderated,member_count,image_url,created_at
+comm1,CS2 Strategies,Discuss strategies maps and competitive play for Counter-Strike 2.,Gaming,false,1520,https://i.imgur.com/HfU6eEP.jpg,2024-01-15T12:00:00Z
+comm2,League of Legends Mains,For LoL enthusiasts to share champion builds meta discussions and find teammates.,Gaming,true,2340,https://i.imgur.com/gjPAvsy.jpg,2024-01-16T12:00:00Z
+comm3,Minecraft Builders,Share your epic builds redstone contraptions and survival stories in Minecraft.,Gaming,false,1876,https://i.imgur.com/NQ9qpHt.jpg,2024-01-17T12:00:00Z
+comm4,Fortnite Squad Finder,Find squad mates discuss strategies and share your Victory Royales.,Gaming,false,1450,https://i.imgur.com/i6VMQYx.jpg,2024-01-18T12:00:00Z
+comm5,Valorant Agents,Discuss agent abilities map strategies and team compositions for Valorant.,Gaming,true,1250,https://i.imgur.com/HsDtXLF.jpg,2024-01-19T12:00:00Z
+comm6,Apex Legends Players,Share your best plays legend strategies and find teammates for ranked play.,Gaming,false,980,https://i.imgur.com/p9pAmzM.jpg,2024-01-20T12:00:00Z
+comm7,Elden Ring Lore Seekers,Explore the deep lore of Elden Ring and share strategies for tough bosses.,Gaming,false,876,https://i.imgur.com/wTOVBFN.jpg,2024-01-21T12:00:00Z
+comm8,Genshin Impact Travelers,Discuss characters builds and the latest updates in Genshin Impact.,Gaming,true,1123,https://i.imgur.com/v1U9WCY.jpg,2024-01-22T12:00:00Z
+comm9,Zelda: TOTK Explorers,Share your Tears of the Kingdom discoveries builds and gameplay tips.,Gaming,false,891,https://i.imgur.com/aNUEIMx.jpg,2024-01-23T12:00:00Z
+comm10,Overwatch 2 Heroes,Discuss heroes team comps and competitive strategies for Overwatch 2.,Gaming,true,765,https://i.imgur.com/Dg6DLm4.jpg,2024-01-24T12:00:00Z
+comm11,Pokémon Masters,For Pokémon fans to discuss games trading cards and competitive play.,Gaming,false,1542,https://i.imgur.com/DGhgU5G.jpg,2024-01-25T12:00:00Z
+comm12,Roblox Creators,Share your Roblox creations find games to play and discuss development.,Gaming,true,2145,https://i.imgur.com/3ueFvnS.jpg,2024-01-26T12:00:00Z
+comm13,Among Us Crewmates,Find games discuss strategies and share your best impostor moments.,Gaming,false,654,https://i.imgur.com/mZ4irPA.jpg,2024-01-27T12:00:00Z
+comm14,Civilization Builders,Share strategies mods and stories from Civilization VI and other 4X games.,Gaming,false,432,https://i.imgur.com/pqwpSrO.jpg,2024-01-28T12:00:00Z
+comm15,Final Fantasy XIV,Discuss raids jobs and glamours in FFXIV. All sprouts welcome!,Gaming,true,987,https://i.imgur.com/Y2xwyuL.jpg,2024-01-29T12:00:00Z
+comm16,Attack on Titan Fans,Discuss the anime and manga share theories and fan art for Attack on Titan.,Anime,false,1876,https://i.imgur.com/Wqpno8m.jpg,2024-01-30T12:00:00Z
+comm17,Naruto Shinobi,For fans of Naruto and Boruto to discuss characters jutsu and story arcs.,Anime,false,2134,https://i.imgur.com/PwKcO7Z.jpg,2024-01-31T12:00:00Z
+comm18,My Hero Academia Plus Ultra,Share theories discuss episodes and celebrate the heroes of MHA.,Anime,true,1542,https://i.imgur.com/oeZSjx4.jpg,2024-02-01T12:00:00Z
+comm19,Demon Slayer Corps,Discuss episodes share fan art and theorize about Demon Slayer's world.,Anime,false,1654,https://i.imgur.com/x66zYuB.jpg,2024-02-02T12:00:00Z
+comm20,Jujutsu Kaisen Sorcerers,Explore cursed techniques character development and the latest episodes.,Anime,true,876,https://i.imgur.com/kUlZhtN.jpg,2024-02-03T12:00:00Z
+comm21,One Piece Pirates,Discuss the grand adventure character stories and theories for future arcs.,Anime,false,2345,https://i.imgur.com/EdbcfLZ.jpg,2024-02-04T12:00:00Z
+comm22,Studio Ghibli Magic,Celebrate the films of Studio Ghibli from Totoro to Spirited Away.,Anime,false,765,https://i.imgur.com/WGlQf0r.jpg,2024-02-05T12:00:00Z
+comm23,Dragon Ball Z Warriors,Power up with discussions about the Dragon Ball series characters and battles.,Anime,true,1432,https://i.imgur.com/exJEwfM.jpg,2024-02-06T12:00:00Z
+comm24,Evangelion Analysis,Deep dive into the themes and symbolism of Neon Genesis Evangelion.,Anime,false,543,https://i.imgur.com/RPwzR5y.jpg,2024-02-07T12:00:00Z
+comm25,Fullmetal Alchemist Brotherhood,Discuss the philosophy characters and alchemy of FMAB.,Anime,false,876,https://i.imgur.com/cMZ8kBf.jpg,2024-02-08T12:00:00Z
+comm26,Harry Potter Wizards,Share your Hogwarts house discuss the books and movies and all things magical.,Books,true,2345,https://i.imgur.com/jWE9ObL.jpg,2024-02-09T12:00:00Z
+comm27,Lord of the Rings Fellowship,For fans of Tolkien's world to discuss the books movies and new series.,Books,false,1765,https://i.imgur.com/gB3AKWE.jpg,2024-02-10T12:00:00Z
+comm28,A Song of Ice and Fire Theories,Discuss George R.R. Martin's epic saga and theories about the upcoming books.,Books,false,876,https://i.imgur.com/Jy7rKOr.jpg,2024-02-11T12:00:00Z
+comm29,Brandon Sanderson Cosmere,Explore the connected universe of Brandon Sanderson's fantasy novels.,Books,true,654,https://i.imgur.com/b0O9FbY.jpg,2024-02-12T12:00:00Z
+comm30,Dune Spice Traders,Discuss Frank Herbert's Dune series its adaptations and themes.,Books,false,543,https://i.imgur.com/OkC3sFv.jpg,2024-02-13T12:00:00Z
+comm31,Percy Jackson Demigods,For fans of Rick Riordan's mythology-based series and its adaptations.,Books,true,1234,https://i.imgur.com/YuYSprH.jpg,2024-02-14T12:00:00Z
+comm32,The Witcher Fans,Discuss the books games and Netflix series of The Witcher saga.,Books,false,987,https://i.imgur.com/LrOlWbf.jpg,2024-02-15T12:00:00Z
+comm33,Neil Gaiman Readers,Share thoughts on American Gods Good Omens Sandman and more.,Books,false,543,https://i.imgur.com/wMQVeui.jpg,2024-02-16T12:00:00Z
+comm34,Stephen King Constant Readers,Discuss the horror master's works from The Shining to The Dark Tower.,Books,true,876,https://i.imgur.com/1ZGDfUi.jpg,2024-02-17T12:00:00Z
+comm35,Wheel of Time Fans,Explore Robert Jordan's epic fantasy series and its adaptation.,Books,false,543,https://i.imgur.com/wMQVeui.jpg,2024-02-18T12:00:00Z
+comm36,Python Developers,Share projects ask questions and discuss Python programming.,Tech,true,1543,https://i.imgur.com/R4tiCh3.jpg,2024-02-19T12:00:00Z
+comm37,JavaScript Ninjas,For frontend and Node.js developers to discuss frameworks and techniques.,Tech,false,1876,https://i.imgur.com/fy4mJJv.jpg,2024-02-20T12:00:00Z
+comm38,AI Enthusiasts,Discuss machine learning neural networks and the future of AI.,Tech,true,987,https://i.imgur.com/ByUz4h6.jpg,2024-02-21T12:00:00Z
+comm39,Blockchain & Crypto,Explore blockchain technology cryptocurrencies and decentralized apps.,Tech,false,765,https://i.imgur.com/lEbSvfJ.jpg,2024-02-22T12:00:00Z
+comm40,iOS Developers,Share app development tips SwiftUI techniques and App Store strategies.,Tech,true,654,https://i.imgur.com/GF4yRWp.jpg,2024-02-23T12:00:00Z
+comm41,Android Devs,For Android app developers to discuss Kotlin Java and the latest APIs.,Tech,false,876,https://i.imgur.com/G6qxVaj.jpg,2024-02-24T12:00:00Z
+comm42,Cybersecurity Experts,Discuss vulnerabilities security practices and hacking prevention.,Tech,true,543,https://i.imgur.com/WePTRxH.jpg,2024-02-25T12:00:00Z
+comm43,Game Development,Share game dev projects discuss engines like Unity and Unreal get feedback.,Tech,false,1234,https://i.imgur.com/Mg9FpTw.jpg,2024-02-26T12:00:00Z
+comm44,Data Scientists,Explore data analysis visualization and machine learning techniques.,Tech,true,765,https://i.imgur.com/ELKwwgL.jpg,2024-02-27T12:00:00Z
+comm45,Web3 Builders,Discuss decentralized web technologies DAOs and web3 development.,Tech,false,432,https://i.imgur.com/c9sYVXe.jpg,2024-02-28T12:00:00Z
+comm46,Marvel Cinematic Universe,Discuss MCU movies shows characters and theories for future phases.,Movies,true,2543,https://i.imgur.com/cK9C8jL.jpg,2024-03-01T12:00:00Z
+comm47,Star Wars Galaxy,For fans of all Star Wars movies shows books and games.,Movies,false,2134,https://i.imgur.com/BgUZTLQ.jpg,2024-03-02T12:00:00Z
+comm48,DC Comics & Films,Discuss Batman Superman Wonder Woman and the entire DC multiverse.,Movies,true,1543,https://i.imgur.com/20tW17l.jpg,2024-03-03T12:00:00Z
+comm49,Horror Movie Fans,Share your favorite scares discuss classic and new horror films.,Movies,false,876,https://i.imgur.com/AqVQhSx.jpg,2024-03-04T12:00:00Z
+comm50,A24 Film Club,Discuss the unique artistic films from A24 studio.,Movies,true,543,https://i.imgur.com/QMVNaai.jpg,2024-03-05T12:00:00Z
+comm51,Sci-Fi Cinema,Explore science fiction films from 2001: A Space Odyssey to Dune.,Movies,false,765,https://i.imgur.com/lbdQ9Xr.jpg,2024-03-06T12:00:00Z
+comm52,Tarantino Fans,Discuss the films characters and signature style of Quentin Tarantino.,Movies,true,432,https://i.imgur.com/1NJXlEF.jpg,2024-03-07T12:00:00Z
+comm53,Studio Ghibli Appreciation,Share your love for Spirited Away My Neighbor Totoro and other classics.,Movies,false,876,https://i.imgur.com/XdfL0VK.jpg,2024-03-08T12:00:00Z
+comm54,Christopher Nolan Films,Discuss the mind-bending movies of Christopher Nolan from Memento to Oppenheimer.,Movies,true,654,https://i.imgur.com/8w4Jjnz.jpg,2024-03-09T12:00:00Z
+comm55,Anime Adaptations,Discuss live-action adaptations of popular anime and manga.,Movies,false,432,https://i.imgur.com/KXxAcM9.jpg,2024-03-10T12:00:00Z
+comm56,Game of Thrones House,Discuss the original series House of the Dragon and more from Westeros.,TV Shows,true,1876,https://i.imgur.com/aaXulxR.jpg,2024-03-11T12:00:00Z
+comm57,Breaking Bad Universe,For fans of Breaking Bad Better Call Saul and the entire ABQ story.,TV Shows,false,1543,https://i.imgur.com/PQ1s3Zc.jpg,2024-03-12T12:00:00Z
+comm58,The Office Dunder Mifflin,That's what she said! Share your favorite moments from The Office.,TV Shows,false,2134,https://i.imgur.com/EKtPK81.jpg,2024-03-13T12:00:00Z
+comm59,Stranger Things Hawkins,Discuss the upside down characters and theories for the final season.,TV Shows,true,1654,https://i.imgur.com/8yJeB50.jpg,2024-03-14T12:00:00Z
+comm60,Star Trek Federation,For Trekkies to discuss all series and movies in the Star Trek universe.,TV Shows,false,876,https://i.imgur.com/RhK3rqg.jpg,2024-03-15T12:00:00Z
+comm61,Doctor Who Companions,Share your favorite Doctors companions and time-traveling adventures.,TV Shows,true,765,https://i.imgur.com/CYadVpE.jpg,2024-03-16T12:00:00Z
+comm62,The Mandalorian Way,This is the way. Discuss The Mandalorian and other Star Wars shows.,TV Shows,false,1234,https://i.imgur.com/JlS9g42.jpg,2024-03-17T12:00:00Z
+comm63,Anime Series Discussions,Talk about your favorite anime series from classics to new releases.,TV Shows,true,1543,https://i.imgur.com/w6SZyMW.jpg,2024-03-18T12:00:00Z
+comm64,Netflix Original Fans,Discuss the best Netflix original series and movies.,TV Shows,false,876,https://i.imgur.com/9q7LXPK.jpg,2024-03-19T12:00:00Z
+comm65,K-Drama Enthusiasts,Share your favorite Korean dramas actors and upcoming releases.,TV Shows,true,654,https://i.imgur.com/2rWw4sS.jpg,2024-03-20T12:00:00Z
+comm66,Digital Illustrators,Share your digital illustrations techniques and favorite software.,Art,false,876,https://i.imgur.com/tl4LbNw.jpg,2024-03-01T12:00:00Z
+comm67,Pixel Artists,For creators and fans of pixel art sprites and retro digital aesthetics.,Art,true,543,https://i.imgur.com/rXf2JVB.jpg,2024-03-02T12:00:00Z
+comm68,Traditional Sketchers,Share your pencil pen and traditional media sketches and techniques.,Art,false,765,https://i.imgur.com/5PQHuqe.jpg,2024-03-03T12:00:00Z
+comm69,Watercolor Painters,For watercolor enthusiasts to share paintings techniques and tips.,Art,true,432,https://i.imgur.com/jxiZl4J.jpg,2024-03-04T12:00:00Z
+comm70,3D Modeling & Rendering,Discuss 3D art creation software like Blender Maya and rendering techniques.,Art,false,654,https://i.imgur.com/o3RkPVY.jpg,2024-03-05T12:00:00Z
+comm71,Anime Art Style,Create and share anime and manga-inspired artwork and character designs.,Art,true,876,https://i.imgur.com/Ue8AqtC.jpg,2024-03-06T12:00:00Z
+comm72,Character Design,Share your original character designs get feedback and discuss techniques.,Art,false,543,https://i.imgur.com/OG7svvo.jpg,2024-03-07T12:00:00Z
+comm73,Street Art & Graffiti,Discuss urban art share your work and explore graffiti culture.,Art,true,432,https://i.imgur.com/W5ujxHt.jpg,2024-03-08T12:00:00Z
+comm74,Digital Photography,Share your photos discuss camera gear and post-processing techniques.,Art,false,765,https://i.imgur.com/rucYxm1.jpg,2024-03-09T12:00:00Z
+comm75,Comic Book Artists,For comic and graphic novel artists to share work and discuss the medium.,Art,true,543,https://i.imgur.com/pWXtRXP.jpg,2024-03-10T12:00:00Z
+comm76,Hip Hop Heads,Discuss rap music artists albums and the culture of hip hop.,Music,false,1543,https://i.imgur.com/5bsFvJv.jpg,2024-03-11T12:00:00Z
+comm77,Rock Music Fans,From classic rock to modern indie discuss your favorite bands and albums.,Music,true,1234,https://i.imgur.com/pYQYGny.jpg,2024-03-12T12:00:00Z
+comm78,EDM & Electronic,Share electronic music discuss genres from house to dubstep and find new artists.,Music,false,876,https://i.imgur.com/pFXF3v4.jpg,2024-03-13T12:00:00Z
+comm79,K-Pop Stans,For fans of Korean pop music to discuss groups songs and performances.,Music,true,2134,https://i.imgur.com/VZ1lkjU.jpg,2024-03-14T12:00:00Z
+comm80,Indie Music Discovery,Share and discover independent artists and underground music.,Music,false,654,https://i.imgur.com/W3WYgG9.jpg,2024-03-15T12:00:00Z
+comm81,Metal Community,Headbang with fellow metalheads and discuss all subgenres of metal.,Music,true,876,https://i.imgur.com/FPNy1CF.jpg,2024-03-16T12:00:00Z
+comm82,Classical Music Appreciation,Discuss composers orchestras and the beauty of classical music.,Music,false,432,https://i.imgur.com/zHZG3oH.jpg,2024-03-17T12:00:00Z
+comm83,Music Producers,For beatmakers and producers to share their work and discuss techniques.,Music,true,765,https://i.imgur.com/e4ZHbDq.jpg,2024-03-18T12:00:00Z
+comm84,Vinyl Collectors,Share your record collections discuss vinyl culture and rare finds.,Music,false,543,https://i.imgur.com/0lhVnFa.jpg,2024-03-19T12:00:00Z
+comm85,Jazz Enthusiasts,Explore the world of jazz from bebop to fusion and beyond.,Music,true,432,https://i.imgur.com/nG25NIE.jpg,2024-03-20T12:00:00Z
+comm86,Cosplay Creators,Share your costume creations work in progress and convention photos.,Cosplay,false,1234,https://i.imgur.com/2GPcXtj.jpg,2024-02-11T12:00:00Z
+comm87,Prop Makers,Discuss techniques for creating realistic props and weapons for cosplay.,Cosplay,true,765,https://i.imgur.com/oqaEJ9Z.jpg,2024-02-12T12:00:00Z
+comm88,Anime Cosplayers,Specifically for cosplayers focusing on anime and manga characters.,Cosplay,false,987,https://i.imgur.com/GK9MogU.jpg,2024-02-13T12:00:00Z
+comm89,Video Game Cosplay,Share your cosplays from video game characters and discuss techniques.,Cosplay,true,654,https://i.imgur.com/TyNq3MD.jpg,2024-02-14T12:00:00Z
+comm90,SFX Makeup Artists,Discuss special effects makeup techniques for cosplay and costumes.,Cosplay,false,543,https://i.imgur.com/F0QhxQ4.jpg,2024-02-15T12:00:00Z
+comm91,Wig Styling,Share techniques for styling wigs for cosplay and costume purposes.,Cosplay,true,432,https://i.imgur.com/rp3yagD.jpg,2024-02-16T12:00:00Z
+comm92,Armor Crafting,For cosplayers who specialize in creating armor for their costumes.,Cosplay,false,543,https://i.imgur.com/WkJB7zG.jpg,2024-02-17T12:00:00Z
+comm93,Cosplay Photography,Discuss photography techniques specifically for capturing great cosplay photos.,Cosplay,true,432,https://i.imgur.com/s1luzfT.jpg,2024-02-18T12:00:00Z
+comm94,Convention Goers,Share tips for attending conventions and making the most of the experience.,Cosplay,false,765,https://i.imgur.com/WZoQQkj.jpg,2024-02-19T12:00:00Z
+comm95,Costume Design,Discuss the art and technique of costume design for cosplay or performance.,Cosplay,true,543,https://i.imgur.com/6cJiQXP.jpg,2024-02-20T12:00:00Z
+comm96,Mental Health Support,A safe space to discuss mental health challenges and support each other.,Wellness,false,876,https://i.imgur.com/CaRxZII.jpg,2024-01-15T12:00:00Z
+comm97,Fitness Enthusiasts,Share workout routines nutrition tips and fitness goals.,Wellness,true,1234,https://i.imgur.com/7X9l3BL.jpg,2024-01-16T12:00:00Z
+comm98,Meditation & Mindfulness,Discuss meditation techniques mindfulness practices and inner peace.,Wellness,false,654,https://i.imgur.com/91W9vWg.jpg,2024-01-17T12:00:00Z
+comm99,Self-Improvement Journey,Share your personal development goals books and growth experiences.,Wellness,true,765,https://i.imgur.com/0Xq8MqS.jpg,2024-01-18T12:00:00Z
+comm100,Plant Parents,For plant enthusiasts to share their collections care tips and green spaces.,Lifestyle,false,987,https://i.imgur.com/JYgFVK0.jpg,2024-01-19T12:00:00Z

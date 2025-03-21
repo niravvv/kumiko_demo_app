@@ -1,0 +1,282 @@
+{% extends "base.html" %}
+
+{% block title %}Messages - Kumiko{% endblock %}
+
+{% block additional_head %}
+<style>
+    :root {
+        --primary-color: #4f46e5;
+        --primary-hover: #4338ca;
+        --dark-surface: #181818;
+        --darker-surface: #121212;
+        --grey-color: #2a2a2a;
+        --light-grey: #aaa;
+        --border-radius: 12px;
+    }
+    
+    body {
+        background-color: var(--darker-surface);
+        color: white;
+    }
+    
+    .card {
+        background-color: var(--dark-surface);
+        border: none;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        border-radius: var(--border-radius);
+    }
+    
+    .card-header {
+        background-color: var(--dark-surface) !important;
+        color: white;
+        border-bottom: 1px solid var(--grey-color);
+    }
+    
+    .card-footer {
+        background-color: var(--dark-surface) !important;
+        border-top: 1px solid var(--grey-color);
+    }
+    
+    .list-group-item {
+        background-color: var(--dark-surface);
+        color: white;
+        border-color: var(--grey-color);
+    }
+    
+    .list-group-item-action:hover {
+        background-color: var(--grey-color);
+        color: white;
+    }
+    
+    .list-group-item.active {
+        background-color: var(--grey-color) !important;
+        border-color: var(--grey-color);
+    }
+    
+    .message {
+        border-radius: 18px;
+    }
+    
+    .message-sent {
+        background-color: var(--primary-color);
+        color: white;
+    }
+    
+    .message-received {
+        background-color: var(--grey-color);
+        color: white;
+    }
+    
+    .text-muted {
+        color: var(--light-grey) !important;
+    }
+    
+    .modal-content {
+        background-color: var(--dark-surface);
+        color: white;
+    }
+    
+    .modal-header, .modal-footer {
+        border-color: var(--grey-color);
+    }
+    
+    .form-control, .form-select {
+        background-color: var(--darker-surface);
+        border-color: var(--grey-color);
+        color: white;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        background-color: var(--darker-surface);
+        color: white;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.25rem rgba(79, 70, 229, 0.25);
+    }
+    
+    .input-group-text {
+        background-color: var(--grey-color);
+        border-color: var(--grey-color);
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="mb-4">Messages</h1>
+    
+    <div class="row">
+        <!-- Conversation list -->
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Conversations</h5>
+                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#newMessageModal">
+                            <i class="fas fa-plus me-1"></i> New
+                        </button>
+                    </div>
+                </div>
+                <div class="list-group list-group-flush">
+                    {% if conversations %}
+                        {% for conv in conversations %}
+                        <a href="/messages/{{ conv.id }}" class="list-group-item list-group-item-action {{ 'active' if conv.id == active_conversation }}">
+                            <div class="d-flex align-items-center">
+                                <img src="{{ conv.user.profile_picture_url }}" alt="{{ conv.user.username }}" 
+                                     class="user-avatar">
+                                <div class="ms-3">
+                                    <h6 class="mb-0">{{ conv.user.username }}</h6>
+                                    <small class="text-muted">{{ conv.last_message }}</small>
+                                </div>
+                                {% if conv.unread > 0 %}
+                                <span class="badge bg-primary rounded-pill ms-auto">{{ conv.unread }}</span>
+                                {% endif %}
+                            </div>
+                        </a>
+                        {% endfor %}
+                    {% else %}
+                        <div class="list-group-item text-center py-4">
+                            <img src="/static/images/empty-state.svg" alt="No messages" class="img-fluid mb-3" style="max-height: 100px;">
+                            <h6>No conversations yet</h6>
+                            <p class="text-muted small mb-0">Start a new message to connect with others</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Messages -->
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    {% if active_conversation %}
+                        <div class="d-flex align-items-center">
+                            <img src="{{ active_user.profile_picture_url }}" alt="{{ active_user.username }}" 
+                                 class="user-avatar">
+                            <div class="ms-3">
+                                <h5 class="mb-0">{{ active_user.username }}</h5>
+                                <small class="text-light opacity-75">
+                                    {% if active_user.is_online %}
+                                        <span class="text-success">Online</span>
+                                    {% else %}
+                                        Last seen {{ active_user.last_seen }}
+                                    {% endif %}
+                                </small>
+                            </div>
+                            <div class="ms-auto">
+                                <button class="btn btn-sm btn-outline-light me-2">
+                                    <i class="fas fa-phone"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-light">
+                                    <i class="fas fa-video"></i>
+                                </button>
+                            </div>
+                        </div>
+                    {% else %}
+                        <h5 class="mb-0">Messages</h5>
+                    {% endif %}
+                </div>
+                
+                {% if active_conversation %}
+                <div class="card-body p-0">
+                    <div class="chat-container">
+                        {% for message in messages %}
+                            <div class="chat-message {{ 'self' if message.user_id == current_user.id else 'other' }}">
+                                {% if message.user_id != current_user.id %}
+                                <small class="text-muted d-block mb-1">{{ message.user.username }}</small>
+                                {% endif %}
+                                {{ message.content }}
+                                <small class="text-white-50 d-block text-end mt-1">
+                                    {{ message.timestamp }}
+                                </small>
+                            </div>
+                        {% endfor %}
+                        
+                        <!-- If no messages, show template messages -->
+                        {% if not messages %}
+                            <div class="chat-message other">
+                                <small class="text-muted d-block mb-1">System</small>
+                                Welcome to Kumiko messaging! This is a sample conversation.
+                                <small class="text-white-50 d-block text-end mt-1">Just now</small>
+                            </div>
+                            
+                            <div class="chat-message other">
+                                How can I help you discover new communities today?
+                                <small class="text-white-50 d-block text-end mt-1">Just now</small>
+                            </div>
+                            
+                            <div class="chat-message self">
+                                I'm looking for gaming communities about RPGs.
+                                <small class="text-white-50 d-block text-end mt-1">Just now</small>
+                            </div>
+                            
+                            <div class="chat-message other">
+                                <small class="text-muted d-block mb-1">System</small>
+                                Great! I can recommend several RPG communities. Let me send you some suggestions.
+                                <small class="text-white-50 d-block text-end mt-1">Just now</small>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card-footer bg-dark text-white">
+                    <form action="/send_message" method="post">
+                        <input type="hidden" name="conversation_id" value="{{ active_conversation }}">
+                        <div class="input-group">
+                            <button type="button" class="btn btn-outline-secondary border-0 bg-dark text-white">
+                                <i class="fas fa-paperclip"></i>
+                            </button>
+                            <input type="text" class="form-control border-0 bg-dark text-white" name="message" placeholder="Type your message..." required>
+                            <button type="submit" class="btn" style="background-color: var(--primary-color); border-color: var(--primary-color);">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                {% else %}
+                <div class="card-body text-center py-5">
+                    <img src="/static/images/empty-state.svg" alt="Select a conversation" class="img-fluid mb-4" style="max-height: 150px;">
+                    <h4 class="mb-3">No conversation selected</h4>
+                    <p class="text-muted mb-4">Select a conversation from the list or start a new one</p>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newMessageModal">
+                        <i class="fas fa-plus me-2"></i> New Message
+                    </button>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- New Message Modal -->
+<div class="modal fade" id="newMessageModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">New Message</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/start_conversation" method="post">
+                    <div class="mb-3">
+                        <label for="recipient" class="form-label">To:</label>
+                        <select class="form-select" id="recipient" name="recipient_id" required>
+                            <option value="" selected disabled>Select a user</option>
+                            {% for user in available_users %}
+                            <option value="{{ user.id }}">{{ user.username }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Message:</label>
+                        <textarea class="form-control" id="message" name="message" rows="3" required></textarea>
+                    </div>
+                    <div class="text-end">
+                        <button type="button" class="btn btn-outline-secondary me-2" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Send</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

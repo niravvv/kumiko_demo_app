@@ -1,0 +1,273 @@
+{% extends "base.html" %}
+
+{% block title %}Kumiko - Find Your Community{% endblock %}
+
+{% block additional_head %}
+<style>
+    /* 
+     * Landing page specific styles
+     * Includes hero section, feature boxes, and testimonial cards
+     */
+    
+    /* Global variables - can be moved to base.html if needed across the site */
+    :root {
+        --primary-color: #4f46e5;
+        --primary-hover: #4338ca;
+        --dark-surface: #181818;
+        --darker-surface: #121212;
+        --grey-color: #2a2a2a;
+        --light-grey: #aaa;
+        --border-radius: 12px;
+    }
+    
+    /* Dark theme base styling */
+    body {
+        background-color: var(--darker-surface);
+        color: white;
+    }
+    
+    /* Hero section background */
+    .hero {
+        background-color: var(--dark-surface) !important;
+        color: white;
+    }
+    
+    /* Card styling for feature boxes */
+    .card {
+        background-color: var(--dark-surface);
+        border: none;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        border-radius: var(--border-radius);
+    }
+    
+    /* Card text colors */
+    .card-body {
+        color: white;
+    }
+    
+    .card-text {
+        color: #ddd;
+    }
+    
+    /* Muted text styling */
+    .text-muted {
+        color: var(--light-grey) !important;
+    }
+    
+    /* Testimonial card styling */
+    .testimonial-card {
+        background-color: var(--dark-surface);
+        border-radius: var(--border-radius);
+        padding: 20px;
+        height: 100%;
+    }
+    
+    /* Testimonial text color */
+    .testimonial-text {
+        color: #ddd;
+    }
+    
+    /* Feature box styling */
+    .feature-box {
+        background-color: var(--dark-surface);
+        border-radius: var(--border-radius);
+        padding: 20px;
+        height: 100%;
+    }
+    
+    /* Section title styling */
+    .section-title {
+        color: white;
+    }
+    
+    /* Outline button styling */
+    .btn-outline-primary {
+        border-color: var(--primary-color);
+        color: white;
+    }
+    
+    /* Outline button hover state */
+    .btn-outline-primary:hover {
+        background-color: var(--primary-color);
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero section - Main banner at the top of the landing page -->
+<section class="hero py-5 text-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-4">Discover Communities That Matter to You</h1>
+                <p class="lead mb-4">Join Kumiko to connect with like-minded people, explore communities based on your interests, and engage in meaningful conversations.</p>
+                <!-- Conditional CTA buttons based on user login status -->
+                {% if not current_user %}
+                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                    <a href="/register" class="btn btn-primary btn-lg px-4 gap-3">Get Started</a>
+                    <a href="/login" class="btn btn-outline-primary btn-lg px-4">Sign In</a>
+                </div>
+                {% else %}
+                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                    <a href="/discover" class="btn btn-primary btn-lg px-4 gap-3">Discover Communities</a>
+                    <a href="/dashboard" class="btn btn-outline-primary btn-lg px-4">My Dashboard</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured communities section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5 section-title">Featured Communities</h2>
+        <div class="row">
+            <!-- Loop through featured communities -->
+            {% for community in featured_communities %}
+            <div class="col-md-4">
+                <div class="card community-card h-100">
+                    <img src="{{ community.image_url }}" class="card-img-top" alt="{{ community.name }}">
+                    <div class="card-body">
+                        <span class="badge bg-secondary mb-2">{{ community.category }}</span>
+                        <h5 class="card-title">{{ community.name }}</h5>
+                        <p class="card-text">{{ community.description }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">{{ community.member_count }} members</small>
+                            <a href="/community/{{ community.id }}" class="btn btn-sm btn-outline-primary">View Community</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- How Kumiko works section - Feature explanation -->
+<section class="py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h2 class="mb-4 section-title">How Kumiko Works</h2>
+                <div class="mb-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-primary text-white rounded-circle p-3 me-3">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0">Discover</h5>
+                            <p class="mb-0">Find communities that match your interests</p>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-primary text-white rounded-circle p-3 me-3">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0">Join</h5>
+                            <p class="mb-0">Become a member of communities you love</p>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex align-items-center">
+                        <div class="bg-primary text-white rounded-circle p-3 me-3">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0">Engage</h5>
+                            <p class="mb-0">Participate in discussions and connect with others</p>
+                        </div>
+                    </div>
+                </div>
+                {% if not current_user %}
+                <a href="/register" class="btn btn-primary">Create Your Account</a>
+                {% endif %}
+            </div>
+            <div class="col-md-6">
+                <img src="/static/images/illustration.svg" alt="How it works" class="img-fluid">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- User testimonials section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5 section-title">What Our Users Say</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card h-100 testimonial-card">
+                    <div class="card-body">
+                        <div class="d-flex mb-3">
+                            <div class="text-warning">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                        <p class="card-text testimonial-text">"Kumiko helped me find communities that share my passion for wildlife photography. I've connected with amazing photographers around the world!"</p>
+                        <div class="d-flex align-items-center">
+                            <img src="/static/images/testimonial1.jpg" alt="User" class="rounded-circle me-3" width="50">
+                            <div>
+                                <h6 class="mb-0">Sarah J.</h6>
+                                <small class="text-muted">Wildlife Photographer</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 testimonial-card">
+                    <div class="card-body">
+                        <div class="d-flex mb-3">
+                            <div class="text-warning">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                        <p class="card-text testimonial-text">"I've been looking for a space to discuss my favorite indie games. On Kumiko, I found not just one but several communities dedicated to indie gaming!"</p>
+                        <div class="d-flex align-items-center">
+                            <img src="/static/images/testimonial2.jpg" alt="User" class="rounded-circle me-3" width="50">
+                            <div>
+                                <h6 class="mb-0">David M.</h6>
+                                <small class="text-muted">Game Developer</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 testimonial-card">
+                    <div class="card-body">
+                        <div class="d-flex mb-3">
+                            <div class="text-warning">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                        <p class="card-text testimonial-text">"As a newcomer to the world of coding, I was overwhelmed. The programming communities on Kumiko provided me with guidance and support every step of the way."</p>
+                        <div class="d-flex align-items-center">
+                            <img src="/static/images/testimonial3.jpg" alt="User" class="rounded-circle me-3" width="50">
+                            <div>
+                                <h6 class="mb-0">Lisa T.</h6>
+                                <small class="text-muted">Web Developer</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,344 @@
+{% extends "base.html" %}
+
+{% block title %}{{ community.name }} - Kumiko{% endblock %}
+
+{% block additional_head %}
+<style>
+    /* 
+     * Community page specific styles
+     * Includes dark theme, card styling, buttons and form elements
+     */
+    
+    /* Global variables - matches dashboard for consistency */
+    :root {
+        --primary-color: #4f46e5;
+        --primary-hover: #4338ca;
+        --dark-surface: #181818;
+        --darker-surface: #121212;
+        --grey-color: #2a2a2a;
+        --light-grey: #aaa;
+        --border-radius: 12px;
+    }
+    
+    /* Dark theme base styling */
+    body {
+        background-color: var(--darker-surface);
+        color: white;
+    }
+    
+    /* Card styling for community info and chat */
+    .card {
+        background-color: var(--dark-surface);
+        border: none;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        border-radius: var(--border-radius);
+    }
+    
+    /* Card header styling */
+    .card-header {
+        background-color: var(--dark-surface) !important;
+        color: white;
+        border-bottom: 1px solid var(--grey-color);
+    }
+    
+    /* Card body text color */
+    .card-body {
+        color: white;
+    }
+    
+    /* Card description text color */
+    .card-text {
+        color: #ddd;
+    }
+    
+    /* List group item styling for member lists */
+    .list-group-item {
+        background-color: var(--dark-surface);
+        color: white;
+        border-color: var(--grey-color);
+    }
+    
+    /* Muted text color */
+    .text-muted {
+        color: var(--light-grey) !important;
+    }
+    
+    /* Modal styling for leave community dialog */
+    .modal-content {
+        background-color: var(--dark-surface);
+        color: white;
+    }
+    
+    /* Modal header and footer borders */
+    .modal-header, .modal-footer {
+        border-color: var(--grey-color);
+    }
+    
+    /* Secondary outline button styling */
+    .btn-outline-secondary {
+        border-color: var(--grey-color);
+        color: white;
+    }
+    
+    /* Secondary outline button hover effect */
+    .btn-outline-secondary:hover {
+        background-color: var(--grey-color);
+        color: white;
+    }
+    
+    /* Danger outline button styling for leave community */
+    .btn-outline-danger {
+        color: #f87171;
+        border-color: #f87171;
+    }
+    
+    /* Danger outline button hover effect */
+    .btn-outline-danger:hover {
+        background-color: #f87171;
+        color: white;
+    }
+    
+    /* Form input and select styling */
+    .form-control, .form-select {
+        background-color: var(--darker-surface);
+        border-color: var(--grey-color);
+        color: white;
+    }
+    
+    /* Form input and select focus states */
+    .form-control:focus, .form-select:focus {
+        background-color: var(--darker-surface);
+        color: white;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.25rem rgba(79, 70, 229, 0.25);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Community main section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <!-- Left column - Community details and chat -->
+            <div class="col-md-8">
+                <!-- Community header card with image and basic info -->
+                <div class="card mb-4">
+                    <img src="{{ community.image_url }}" class="card-img-top" alt="{{ community.name }}" style="height: 250px; object-fit: cover;">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <h1 class="card-title mb-1">{{ community.name }}</h1>
+                                <span class="badge bg-primary">{{ community.category }}</span>
+                            </div>
+                            <!-- Conditional join/leave button based on membership -->
+                            {% if is_member %}
+                            <button class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#leaveModal">
+                                <i class="fas fa-sign-out-alt me-1"></i> Leave
+                            </button>
+                            {% else %}
+                            <form action="/join-community" method="post">
+                                <input type="hidden" name="community_id" value="{{ community.id }}">
+                                <button type="submit" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-user-plus me-1"></i> Join
+                                </button>
+                            </form>
+                            {% endif %}
+                        </div>
+                        
+                        <p class="card-text">{{ community.description }}</p>
+                        
+                        <!-- Community stats - member count and moderation level -->
+                        <div class="d-flex align-items-center text-muted small mb-3">
+                            <div class="me-3">
+                                <i class="fas fa-users me-1"></i>
+                                <span>{{ community.member_count }} members</span>
+                            </div>
+                            <div class="me-3">
+                                <i class="fas fa-shield-alt me-1"></i>
+                                <span>{{ community.moderation }} moderation</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Chat section - only visible to members -->
+                {% if is_member %}
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Community Chat</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="chat-container" id="chat-container">
+                            <!-- Empty state for no messages -->
+                            {% if not community_messages %}
+                            <div class="text-center py-5">
+                                <i class="fas fa-comments text-muted fa-3x mb-3"></i>
+                                <h5>No messages yet</h5>
+                                <p class="text-muted">Be the first to start a conversation!</p>
+                            </div>
+                            {% else %}
+                            <!-- Loop through chat messages -->
+                            {% for message in community_messages %}
+                            <div class="chat-message {% if message.user_id == current_user.id %}self{% else %}other{% endif %} mb-3">
+                                <!-- Show user avatar and name for messages from others -->
+                                {% if message.user_id != current_user.id %}
+                                <div class="d-flex align-items-center mb-1">
+                                    <img src="{{ message.user_profile_pic }}" alt="{{ message.username }}" class="user-avatar">
+                                    <strong>{{ message.username }}</strong>
+                                </div>
+                                {% endif %}
+                                <div>{{ message.content }}</div>
+                                <small class="text-muted d-block mt-1 text-end">{{ message.timestamp|time }}</small>
+                            </div>
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Message input form -->
+                        <div class="card-footer">
+                            <form id="chat-form" action="/send-message" method="post">
+                                <input type="hidden" name="community_id" value="{{ community.id }}">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Type a message..." name="message" id="message-input" required>
+                                    <button class="btn btn-primary" type="submit">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            
+            <!-- Right column - Sidebar with community info and members -->
+            <div class="col-md-4">
+                <!-- About community card -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">About This Community</h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Community category info -->
+                        <div class="mb-3">
+                            <h6 class="text-muted mb-2">Category</h6>
+                            <p>{{ community.category }}</p>
+                        </div>
+                        
+                        <!-- Member count information -->
+                        <div class="mb-3">
+                            <h6 class="text-muted mb-2">Members</h6>
+                            <p>{{ community.member_count }} people</p>
+                        </div>
+                        
+                        <!-- Moderation level information -->
+                        <div class="mb-3">
+                            <h6 class="text-muted mb-2">Moderation Level</h6>
+                            <p>{{ community.moderation }}</p>
+                        </div>
+                        
+                        <!-- Community rules -->
+                        <div>
+                            <h6 class="text-muted mb-2">Rules</h6>
+                            <ul class="ps-3">
+                                <li>Be respectful to all members</li>
+                                <li>No spam or self-promotion</li>
+                                <li>Stay on topic with discussions</li>
+                                <li>No hate speech or harassment</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Community members list -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Members</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <ul class="list-group list-group-flush">
+                            <!-- Loop through community members -->
+                            {% for member in community_members %}
+                            <li class="list-group-item">
+                                <div class="d-flex align-items-center">
+                                    <!-- Member avatar -->
+                                    <img src="{{ member.profile_picture_url }}" class="rounded-circle me-3" width="40" height="40" style="object-fit: cover;">
+                                    <div>
+                                        <h6 class="mb-0">{{ member.username }}</h6>
+                                        <small class="text-muted">{% if member.id == current_user.id %}You{% else %}Member{% endif %}</small>
+                                    </div>
+                                    <a href="/profile/{{ member.id }}" class="btn btn-sm btn-outline-primary ms-auto">Profile</a>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Leave community confirmation modal - only shown to members -->
+{% if is_member %}
+<!-- Leave Community Modal -->
+<div class="modal fade" id="leaveModal" tabindex="-1" aria-labelledby="leaveModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="leaveModalLabel">Leave Community</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to leave <strong>{{ community.name }}</strong>?</p>
+                <p>You will lose access to all conversations and will need to rejoin to participate again.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form action="/leave-community" method="post">
+                    <input type="hidden" name="community_id" value="{{ community.id }}">
+                    <button type="submit" class="btn btn-danger">Leave Community</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Wait for the DOM to be ready
+    document.addEventListener('DOMContentLoaded', function() {
+        // Scroll chat to bottom when page loads
+        const chatContainer = document.getElementById('chat-container');
+        if (chatContainer) {
+            // Set the scroll position to the bottom of the chat container
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        // Handle chat form submission
+        const chatForm = document.getElementById('chat-form');
+        if (chatForm) {
+            // Add an event listener to the form's submit event
+            chatForm.addEventListener('submit', function(e) {
+                // Prevent the default form submission behavior
+                e.preventDefault();
+                
+                // Get the message input field
+                const messageInput = document.getElementById('message-input');
+                // Get the trimmed message value
+                const message = messageInput.value.trim();
+                
+                // Check if the message is not empty
+                if (message) {
+                    // In a real app, we'd use WebSockets or AJAX
+                    // For now, just submit the form normally
+                    this.submit();
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

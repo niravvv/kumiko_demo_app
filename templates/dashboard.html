@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Kumiko{% endblock %}
+
+{% block additional_head %}
+<style>
+    /* 
+     * Dashboard specific styles
+     * Includes cards, profile elements, and community listings
+     */
+    
+    /* Global variables - these could be moved to base.html */
+    :root {
+        --primary-color: #4f46e5;
+        --primary-hover: #4338ca;
+        --dark-surface: #181818;
+        --darker-surface: #121212;
+        --grey-color: #2a2a2a;
+        --light-grey: #aaa;
+        --border-radius: 12px;
+    }
+    
+    /* Dark theme base styling */
+    body {
+        background-color: var(--darker-surface);
+        color: white;
+    }
+    
+    /* Card styling for community and profile cards */
+    .card {
+        background-color: var(--dark-surface);
+        border: none;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        border-radius: var(--border-radius);
+    }
+    
+    /* Card header styling */
+    .card-header {
+        background-color: var(--dark-surface) !important;
+        color: white;
+        border-bottom: 1px solid var(--grey-color);
+    }
+    
+    /* Card body text color */
+    .card-body {
+        color: white;
+    }
+    
+    /* Card description text color */
+    .card-text {
+        color: #ddd;
+    }
+    
+    /* List group item styling for community lists */
+    .list-group-item {
+        background-color: var(--dark-surface);
+        color: white;
+        border-color: var(--grey-color);
+    }
+    
+    /* Muted text color */
+    .text-muted {
+        color: var(--light-grey) !important;
+    }
+    
+    /* Interest tag styling for user profile */
+    .interest-tag {
+        display: inline-block;
+        background-color: var(--grey-color);
+        color: white;
+        border-radius: 15px;
+        padding: 2px 10px;
+        margin-right: 5px;
+        margin-bottom: 5px;
+        font-size: 0.8rem;
+    }
+    
+    /* Badge styling (used for categories) */
+    .badge {
+        background-color: var(--primary-color);
+    }
+    
+    /* Outline button styling */
+    .btn-outline-primary {
+        border-color: var(--primary-color);
+        color: white;
+    }
+    
+    /* Outline button hover effect */
+    .btn-outline-primary:hover {
+        background-color: var(--primary-color);
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Dashboard main section -->
+<section class="py-5">
+    <div class="container">
+        <!-- Dashboard header with welcome message and discover button -->
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h1 class="mb-0">Welcome, {{ current_user.username }}!</h1>
+                <p class="text-muted">Here's what's happening in your communities</p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <a href="/discover" class="btn btn-outline-primary">
+                    <i class="fas fa-compass me-2"></i> Discover Communities
+                </a>
+            </div>
+        </div>
+
+        <!-- Empty state shown when user has not joined any communities -->
+        {% if not user_communities %}
+        <div class="card mb-4">
+            <div class="card-body text-center py-5">
+                <img src="/static/images/empty-state.svg" alt="No communities" class="img-fluid mb-4" style="max-height: 150px;">
+                <h3>You haven't joined any communities yet!</h3>
+                <p class="text-muted mb-4">Discover and join communities that align with your interests.</p>
+                <a href="/discover" class="btn btn-primary">Discover Communities</a>
+            </div>
+        </div>
+        {% else %}
+        <!-- Dashboard content when user has joined communities -->
+        <div class="row">
+            <!-- User communities section - left column -->
+            <div class="col-md-8">
+                <h2 class="mb-4">Your Communities</h2>
+                <div class="row">
+                    <!-- Loop through communities the user has joined -->
+                    {% for community in user_communities %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100 community-card">
+                            <!-- Community image with fallback handled by app.py -->
+                            <img src="{{ community.image_url }}" class="card-img-top" alt="{{ community.name }}">
+                            <div class="card-body">
+                                <span class="badge bg-secondary mb-2">{{ community.category }}</span>
+                                <h5 class="card-title">{{ community.name }}</h5>
+                                <p class="card-text">{{ community.description }}</p>
+                            </div>
+                            <div class="card-footer bg-white">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted">{{ community.member_count }} members</small>
+                                    <a href="/community/{{ community.id }}" class="btn btn-sm btn-primary">
+                                        <i class="fas fa-comments me-1"></i> Open
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- Sidebar - right column with profile and recommendations -->
+            <div class="col-md-4">
+                <!-- User profile card -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Your Profile</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <!-- User avatar -->
+                        <img src="{{ current_user.profile_picture_url }}" alt="{{ current_user.username }}" class="rounded-circle mb-3" width="100">
+                        <h5 class="mb-1">{{ current_user.username }}</h5>
+                        <p class="text-muted small mb-3">{{ current_user.email }}</p>
+                        <!-- User interest tags -->
+                        <div class="mb-3">
+                            {% for interest in current_user.interests %}
+                            <span class="interest-tag">{{ interest }}</span>
+                            {% endfor %}
+                        </div>
+                        <a href="/profile/{{ current_user.id }}" class="btn btn-sm btn-outline-primary">View Full Profile</a>
+                    </div>
+                </div>
+                
+                <!-- Recommended communities card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Recommended Communities</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <ul class="list-group list-group-flush">
+                            <!-- Loop through recommended communities -->
+                            {% for community in recommended_communities %}
+                            <li class="list-group-item">
+                                <div class="d-flex align-items-center">
+                                    <!-- Community thumbnail -->
+                                    <img src="{{ community.image_url }}" class="rounded me-3" width="50" height="50" style="object-fit: cover;">
+                                    <div>
+                                        <h6 class="mb-0">{{ community.name }}</h6>
+                                        <p class="text-muted small mb-0">{{ community.member_count }} members</p>
+                                    </div>
+                                    <a href="/community/{{ community.id }}" class="btn btn-sm btn-outline-primary ms-auto">View</a>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,659 @@
+{% extends 'base.html' %}
+
+{% block title %}Discover Communities - Kumiko{% endblock %}
+
+{% block additional_head %}
+<style>
+    /* 
+     * Discover page specific styles 
+     * Includes card layout, card interaction buttons, and notification system
+     */
+
+    /* Community card container */
+    .community-card-container {
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto;
+        height: 450px;
+        position: relative;
+        perspective: 1000px;
+    }
+    
+    /* Individual community card styling */
+    .community-card {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background-color: var(--dark-elevated);
+        border-radius: var(--border-radius);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    
+    /* Card image container */
+    .card-img-container {
+        height: 250px;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    /* Card image styling */
+    .card-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    /* Category badge on card */
+    .category-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background-color: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+    }
+    
+    /* Member count on card */
+    .member-count {
+        position: absolute;
+        bottom: 15px;
+        left: 15px;
+        background-color: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+    }
+    
+    /* Card content (text area) */
+    .card-content {
+        padding: 20px;
+    }
+    
+    /* Community card button controls */
+    .community-controls {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 30px;
+    }
+    
+    /* Individual control button styling */
+    .control-btn {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-color: var(--dark-elevated);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: 2px solid transparent;
+    }
+    
+    /* Reject button (red) */
+    .control-btn.reject {
+        border-color: #F44336;
+        color: #F44336;
+    }
+    
+    /* Reject button hover effect */
+    .control-btn.reject:hover {
+        background-color: #F44336;
+        color: white;
+    }
+    
+    /* Like button (green) */
+    .control-btn.like {
+        border-color: #4CAF50;
+        color: #4CAF50;
+    }
+    
+    /* Like button hover effect */
+    .control-btn.like:hover {
+        background-color: #4CAF50;
+        color: white;
+    }
+    
+    /* Super Like button (blue) */
+    .control-btn.super-like {
+        border-color: #2196F3;
+        color: #2196F3;
+    }
+    
+    /* Super Like button hover effect */
+    .control-btn.super-like:hover {
+        background-color: #2196F3;
+        color: white;
+    }
+    
+    /* No more communities message */
+    .no-more {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 450px;
+        background-color: var(--dark-elevated);
+        border-radius: var(--border-radius);
+        padding: 20px;
+        text-align: center;
+    }
+    
+    /* No more communities icon */
+    .no-more i {
+        font-size: 50px;
+        margin-bottom: 20px;
+        color: var(--grey-color);
+    }
+    
+    /* Filter drawer styling */
+    .filter-drawer {
+        position: fixed;
+        top: 0;
+        right: -300px;
+        width: 300px;
+        height: 100vh;
+        background-color: var(--dark-surface);
+        z-index: 2000;
+        padding: 20px;
+        transition: right 0.3s ease;
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* When filter drawer is open */
+    .filter-drawer.open {
+        right: 0;
+    }
+    
+    /* Backdrop when filter drawer is open */
+    .drawer-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1999;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+    }
+    
+    /* Backdrop when active */
+    .drawer-backdrop.active {
+        opacity: 1;
+        pointer-events: auto;
+    }
+    
+    /* Notification styles */
+    .notification {
+        position: fixed;
+        top: -100px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 9999;
+        padding: 15px 25px;
+        border-radius: 8px;
+        background-color: #343a40;
+        color: #fff;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        transition: all 0.5s ease-in-out;
+        max-width: 90%;
+        width: 350px;
+        display: flex;
+        align-items: center;
+        border-left: 4px solid transparent;
+    }
+    
+    /* When notification is shown */
+    .notification.show {
+        top: 20px;
+        transform: translateX(-50%) translateY(0);
+    }
+    
+    /* Success notification variant */
+    .notification.success {
+        border-left-color: #4CAF50;
+    }
+    
+    /* Error notification variant */
+    .notification.error {
+        border-left-color: #F44336;
+    }
+    
+    /* Info notification variant */
+    .notification.info {
+        border-left-color: #2196F3;
+    }
+    
+    /* Notification content layout */
+    .notification-content {
+        display: flex;
+        align-items: center;
+    }
+    
+    /* Notification icon styling */
+    .notification-icon {
+        margin-right: 12px;
+        font-size: 1.2rem;
+    }
+    
+    /* Notification message text */
+    .notification-message {
+        flex-grow: 1;
+    }
+    
+    /* Swipe animation styling */
+    .swipe-left {
+        transform: translateX(-150%) rotate(-30deg) !important;
+        opacity: 0 !important;
+        transition: all 0.5s ease !important;
+    }
+    
+    .swipe-right {
+        transform: translateX(150%) rotate(30deg) !important;
+        opacity: 0 !important;
+        transition: all 0.5s ease !important;
+    }
+    
+    /* Swipe hints */
+    .swipe-hint {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: var(--border-radius);
+        opacity: 0;
+        transition: opacity 0.3s, background-color 0.3s;
+        pointer-events: none;
+        z-index: 11;
+    }
+    
+    .swipe-hint-left {
+        background: linear-gradient(to left, transparent, rgba(244, 63, 94, 0.2));
+    }
+    
+    .swipe-hint-right {
+        background: linear-gradient(to right, transparent, rgba(34, 197, 94, 0.2));
+    }
+    
+    .swipe-hint.active {
+        opacity: 1;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Main discover container -->
+<div class="container mt-5 pt-4">
+    <!-- Header with title and filter button -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Discover</h2>
+        <button id="filter-btn" class="btn btn-sm btn-outline-light">
+            <i class="fas fa-sliders-h me-1"></i> Filters
+        </button>
+    </div>
+    
+    <!-- Community card display area -->
+    <div class="community-card-container" id="card-container">
+        {% if discover_communities %}
+            {% for community in discover_communities %}
+                {# Generate a placeholder SVG image with community color based on name hash #}
+                {% set placeholder_svg = "data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%20baseProfile%3D%22full%22%20width%3D%22300%22%20height%3D%22200%22%3E%3Crect%20width%3D%22300%22%20height%3D%22200%22%20fill%3D%22hsl(" ~ (community.name|hash % 360) ~ "%2C70%25%2C40%25)%22%2F%3E%3Ctext%20x%3D%22150%22%20y%3D%22100%22%20font-size%3D%2220%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%3E" ~ community.category ~ "%3C%2Ftext%3E%3C%2Fsvg%3E" %}
+                <!-- Community card with details -->
+                <div class="community-card" 
+                     data-id="{{ community.id }}" 
+                     data-index="{{ loop.index0 }}" 
+                     style="z-index: {{ 100 - loop.index0 }}; opacity: {{ 1 if loop.index0 == 0 else 0.8 if loop.index0 == 1 else 0 }}; transform: translateY({{ loop.index0 * 20 }}px) scale({{ 1 - loop.index0 * 0.05 }});"
+                     >
+                    <!-- Swipe hint overlays -->
+                    <div class="swipe-hint swipe-hint-left"></div>
+                    <div class="swipe-hint swipe-hint-right"></div>
+                    <div class="card-img-container">
+                        <img src="{{ community.image_url }}" alt="{{ community.name }}" class="card-img" onerror="this.onerror=null; this.src='{{ placeholder_svg }}';">
+                        <div class="category-badge">{{ community.category }}</div>
+                        <div class="member-count"><i class="fas fa-users me-1"></i> {{ community.member_count }}</div>
+                    </div>
+                    <div class="card-content">
+                        <h3>{{ community.name }}</h3>
+                        <p>{{ community.description }}</p>
+                        <small class="text-muted">Created: {{ community.created_at|date }}</small>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <!-- Displayed when no communities are available -->
+            <div class="no-more">
+                <i class="fas fa-check-circle"></i>
+                <h3>All caught up!</h3>
+                <p>You've seen all available communities. Check back later for more.</p>
+                <a href="/dashboard" class="btn btn-outline-light mt-3">Back to Dashboard</a>
+            </div>
+        {% endif %}
+    </div>
+    
+    <!-- Control buttons for interacting with communities -->
+    {% if discover_communities %}
+        <div class="community-controls">
+            <div class="control-btn reject" data-action="reject">
+                <i class="fas fa-times"></i>
+            </div>
+            <div class="control-btn super-like" data-action="super_like">
+                <i class="fas fa-star"></i>
+            </div>
+            <div class="control-btn like" data-action="like">
+                <i class="fas fa-check"></i>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Filter drawer for category filtering -->
+<div class="filter-drawer" id="filter-drawer">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4>Filter Communities</h4>
+        <button id="close-filter" class="btn btn-sm btn-outline-light">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Category</label>
+        <select class="form-select bg-dark text-light" id="category-filter">
+            <option value="">All Categories</option>
+            <option value="Gaming">Gaming</option>
+            <option value="Technology">Technology</option>
+            <option value="Art">Art</option>
+            <option value="Music">Music</option>
+            <option value="Sports">Sports</option>
+            <option value="Education">Education</option>
+            <option value="Travel">Travel</option>
+            <option value="Food">Food</option>
+            <option value="Fashion">Fashion</option>
+            <option value="Fitness">Fitness</option>
+        </select>
+    </div>
+    <button class="btn btn-primary" id="apply-filter">Apply Filter</button>
+</div>
+
+<!-- Background overlay for filter drawer -->
+<div class="drawer-backdrop" id="drawer-backdrop"></div>
+
+<!-- Notification container -->
+<div class="notification" id="notification">
+    <div class="notification-content">
+        <div class="notification-icon">
+            <i class="fas fa-info-circle"></i>
+        </div>
+        <div class="notification-message">
+            This is a notification
+        </div>
+    </div>
+</div>
+
+<script>
+    // Client-side JavaScript for community card interactions and filtering
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get card container and all community cards
+        const cardContainer = document.getElementById('card-container');
+        const cards = Array.from(document.querySelectorAll('.community-card'));
+        
+        // Get control buttons
+        const controlBtns = document.querySelectorAll('.control-btn');
+        
+        // Initialize current card index
+        let currentCardIndex = 0;
+        
+        // Notification system
+        const notification = document.getElementById('notification');
+        
+        // Show a notification message
+        function showNotification(message, type = 'info') {
+            // Set notification icon based on type
+            let icon = 'fa-info-circle';
+            if (type === 'success') icon = 'fa-check-circle';
+            if (type === 'error') icon = 'fa-exclamation-circle';
+            
+            // Set notification content
+            notification.querySelector('.notification-icon i').className = `fas ${icon}`;
+            notification.querySelector('.notification-message').textContent = message;
+            
+            // Reset notification classes and set new type
+            notification.className = 'notification';
+            notification.classList.add(type);
+            notification.classList.add('show');
+            
+            // Hide notification after 3 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Process community card action (like, super_like, reject)
+        function processCardAction(action) {
+            if (currentCardIndex >= cards.length) return;
+            
+            const currentCard = cards[currentCardIndex];
+            const communityId = currentCard.dataset.id;
+            
+            console.log(`Processing action: ${action} for card index: ${currentCardIndex}, community ID: ${communityId}`);
+            
+            // Apply swipe animation based on action
+            if (action === 'reject') {
+                currentCard.classList.add('swipe-left');
+            } else if (action === 'like' || action === 'super_like') {
+                currentCard.classList.add('swipe-right');
+            }
+            
+            // Send action to the server
+            fetch('/swipe', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    community_id: communityId,
+                    action: action
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    showNotification(data.message, 'success');
+                } else {
+                    showNotification(data.message || 'Something went wrong', 'error');
+                }
+            })
+            .catch(error => {
+                showNotification('Network error. Please try again.', 'error');
+                console.error('Error:', error);
+            });
+            
+            // Wait for animation to complete before moving to next card
+            setTimeout(() => {
+                // Remove the current card from DOM
+                if (currentCard.parentNode) {
+                    currentCard.parentNode.removeChild(currentCard);
+                }
+                
+                // Increment the current card index
+                currentCardIndex++;
+                
+                // Check if we've reached the end
+                if (currentCardIndex >= cards.length) {
+                    showNotification('No more communities to discover!', 'info');
+                    return;
+                }
+                
+                // Reset all cards to their original state
+                resetCardLayout();
+            }, 300);
+        }
+        
+        // Reset all cards to their proper positions
+        function resetCardLayout() {
+            cards.slice(currentCardIndex).forEach((card, index) => {
+                // Remove any animation classes
+                card.classList.remove('swipe-left', 'swipe-right');
+                
+                // Calculate the real index relative to current position
+                const relativeIndex = index;
+                
+                // Show only the first 3 cards
+                if (relativeIndex < 3) {
+                    card.style.display = 'block';
+                    card.style.opacity = relativeIndex === 0 ? '1' : relativeIndex === 1 ? '0.8' : '0.6';
+                    card.style.transform = `translateY(${relativeIndex * 20}px) scale(${1 - relativeIndex * 0.05})`;
+                    card.style.zIndex = `${100 - relativeIndex}`;
+                } else {
+                    card.style.display = 'none';
+                }
+                
+                console.log(`Reset card at index ${currentCardIndex + index} (relative: ${relativeIndex}) - z-index: ${100 - relativeIndex}`);
+            });
+        }
+        
+        // Initialize card layout
+        resetCardLayout();
+        
+        // Expose the processCardAction function globally for Hammer.js
+        window.processCardAction = processCardAction;
+        
+        // Attach click event listeners to control buttons
+        controlBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const action = this.dataset.action;
+                processCardAction(action);
+            });
+        });
+        
+        // Filter drawer functionality
+        const filterBtn = document.getElementById('filter-btn');
+        const filterDrawer = document.getElementById('filter-drawer');
+        const closeFilterBtn = document.getElementById('close-filter');
+        const drawerBackdrop = document.getElementById('drawer-backdrop');
+        const applyFilterBtn = document.getElementById('apply-filter');
+        const categoryFilter = document.getElementById('category-filter');
+        
+        // Open filter drawer
+        filterBtn.addEventListener('click', function() {
+            filterDrawer.classList.add('open');
+            drawerBackdrop.classList.add('active');
+        });
+        
+        // Close filter drawer
+        function closeFilterDrawer() {
+            filterDrawer.classList.remove('open');
+            drawerBackdrop.classList.remove('active');
+        }
+        
+        closeFilterBtn.addEventListener('click', closeFilterDrawer);
+        drawerBackdrop.addEventListener('click', closeFilterDrawer);
+        
+        // Apply category filter
+        applyFilterBtn.addEventListener('click', function() {
+            const category = categoryFilter.value;
+            window.location.href = `/discover${category ? '?category=' + category : ''}`;
+        });
+        
+        // Set initial category filter value from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const categoryParam = urlParams.get('category');
+        if (categoryParam) {
+            categoryFilter.value = categoryParam;
+        }
+    });
+</script>
+
+<!-- Add Hammer.js for swipe gestures -->
+<script src="https://hammerjs.github.io/dist/hammer.min.js"></script>
+
+<script>
+    // Swipe gesture handling with Hammer.js
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get references to the main processCardAction function from the previous script
+        const processCardAction = window.processCardAction;
+        
+        if (!processCardAction) {
+            console.error('processCardAction function not found. Make sure it is defined earlier in the document.');
+            return;
+        }
+        
+        const cardContainer = document.getElementById('card-container');
+        const cards = Array.from(document.querySelectorAll('.community-card'));
+        
+        // Initialize Hammer.js for swipe gestures and pan
+        if (cards.length > 0) {
+            cards.forEach((card, index) => {
+                const hammer = new Hammer(card);
+                
+                // Configure Hammer for horizontal swipes and pan
+                hammer.get('swipe').set({ direction: Hammer.DIRECTION_HORIZONTAL });
+                hammer.get('pan').set({ direction: Hammer.DIRECTION_HORIZONTAL });
+                
+                // Add visual feedback during panning
+                const hintLeft = card.querySelector('.swipe-hint-left');
+                const hintRight = card.querySelector('.swipe-hint-right');
+                
+                // Handle pan events for visual feedback
+                hammer.on('panleft', function(e) {
+                    // Show reject hint during left panning
+                    hintLeft.classList.add('active');
+                    hintRight.classList.remove('active');
+                    
+                    // Apply slight rotation during pan
+                    const rotate = Math.min(e.deltaX * 0.1, 15);
+                    card.style.transform = `translateX(${e.deltaX * 0.5}px) rotate(${rotate}deg)`;
+                });
+                
+                hammer.on('panright', function(e) {
+                    // Show like hint during right panning
+                    hintRight.classList.add('active');
+                    hintLeft.classList.remove('active');
+                    
+                    // Apply slight rotation during pan
+                    const rotate = Math.min(e.deltaX * 0.1, 15);
+                    card.style.transform = `translateX(${e.deltaX * 0.5}px) rotate(${rotate}deg)`;
+                });
+                
+                hammer.on('panend pancancel', function(e) {
+                    // Reset hints
+                    hintLeft.classList.remove('active');
+                    hintRight.classList.remove('active');
+                    
+                    // If the pan was fast enough or far enough, trigger the swipe
+                    const threshold = window.innerWidth * 0.3; // 30% of screen width
+                    
+                    if (e.deltaX < -threshold || (e.deltaX < 0 && e.velocityX < -0.5)) {
+                        processCardAction('reject');
+                    } else if (e.deltaX > threshold || (e.deltaX > 0 && e.velocityX > 0.5)) {
+                        processCardAction('like');
+                    } else {
+                        // Reset card position if not swiped far enough
+                        card.style.transform = '';
+                    }
+                });
+                
+                // Handle swipe left (reject)
+                hammer.on('swipeleft', function() {
+                    processCardAction('reject');
+                });
+                
+                // Handle swipe right (like)
+                hammer.on('swiperight', function() {
+                    processCardAction('like');
+                });
+            });
+        }
+    });
+</script>
+
+{% endblock %}
