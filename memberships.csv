@@ -1,0 +1,11 @@
+id,user_id,community_id,status,joined_at
+user1_comm1,user1,comm1,joined,2024-01-20T10:30:00Z
+user2_comm1,user2,comm1,joined,2024-01-22T14:15:00Z
+user3_comm1,user3,comm1,joined,2024-01-25T09:45:00Z
+user1_comm2,user1,comm2,joined,2024-02-01T11:20:00Z
+user4_comm2,user4,comm2,joined,2024-02-03T16:40:00Z
+user5_comm2,user5,comm2,joined,2024-02-05T13:10:00Z
+user2_comm3,user2,comm3,joined,2024-02-10T15:30:00Z
+user3_comm3,user3,comm3,joined,2024-02-12T10:05:00Z
+user1_comm4,user1,comm4,joined,2024-02-15T14:25:00Z
+user5_comm4,user5,comm4,joined,2024-02-17T12:50:00Z

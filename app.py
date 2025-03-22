@@ -49,6 +49,19 @@ def date_filter(value, format='%B %d, %Y'):
             return value
     return value.strftime(format)
 
+@app.template_filter('time')
+def time_filter(value, format='%H:%M'):
+    """
+    Format time in templates.
+    Converts string timestamps to datetime objects and formats them according to specified format.
+    """
+    if isinstance(value, str):
+        try:
+            value = datetime.strptime(value, '%Y-%m-%dT%H:%M:%SZ')
+        except ValueError:
+            return value
+    return value.strftime(format)
+
 # In-memory data storage for the demo app
 # These dictionaries simulate database tables
 users = {}                # Stores user data
